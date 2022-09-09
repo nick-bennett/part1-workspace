@@ -1,12 +1,22 @@
+import java.util.Set;
+
 public class Television {
 
   public static final int MIN_VOLUME = 0;
   public static final int MAX_VOLUME = 100;
+  public static final Set<String> VALID_BRANDS = Set.of("Samsung", "LG", "Sony", "Toshiba");
+
+  private static final String INVALID_BRAND_FORMAT =
+      "%s is not a valid brand; one of %s is required.%n";
+  private static final String INVALID_VOLUME_FORMAT =
+      "%d is invalid; volume must be between %d and %d (inclusive).%n";
+  private static final String TO_STRING_FORMAT = "Television: brand=%s, volume=%d, display=%s";
 
   private static int instanceCount = 0;
 
   private String brand;
   private int volume;
+  private DisplayType display = DisplayType.LED;
 
   public Television() {
     instanceCount++;
@@ -20,6 +30,11 @@ public class Television {
   public Television(String brand, int volume) {
     this(brand);
     setVolume(volume);
+  }
+
+  public Television(String brand, int volume, DisplayType display) {
+    this(brand, volume);
+    setDisplay(display);
   }
 
   public void turnOn() {
@@ -40,22 +55,11 @@ public class Television {
   }
 
   public void setBrand(String brand) {
-    switch (brand) {
-      case "Samsung":
-      case "LG":
-      case "Sony":
-      case "Toshiba":
-        this.brand = brand;
-        break;
-      default:
-        System.out.printf(
-            "%s is not a valid brand; only Samsung, LG, Sony, and Toshiba are allowed.%n", brand);
+    if (VALID_BRANDS.contains(brand)) {
+      this.brand = brand;
+    } else {
+      System.out.printf(INVALID_BRAND_FORMAT, brand, VALID_BRANDS);
     }
-//    if (brand.equals("Samsung") || brand.equals("LG") || brand.equals("Sony") || brand.equals("Toshiba")) {
-//      this.brand = brand;
-//    } else {
-//      System.out.printf("%s is not a valid brand; only Samsung, LG, Sony, and Toshiba are allowed.%n", brand);
-//    }
   }
 
   public int getVolume() {
@@ -64,10 +68,18 @@ public class Television {
 
   public void setVolume(int volume) {
     if (volume < MIN_VOLUME || volume > MAX_VOLUME) {
-      System.out.printf("%d is invalid; volume must be between %d and %d (inclusive).%n", volume, MIN_VOLUME, MAX_VOLUME);
+      System.out.printf(INVALID_VOLUME_FORMAT, volume, MIN_VOLUME, MAX_VOLUME);
     } else {
       this.volume = volume;
     }
+  }
+
+  public DisplayType getDisplay() {
+    return display;
+  }
+
+  public void setDisplay(DisplayType display) {
+    this.display = display;
   }
 
   private boolean verifyInternetConnection() {
@@ -76,7 +88,7 @@ public class Television {
 
   @Override
   public String toString() {
-    return "Television: brand=" + brand + ", volume=" + volume;
+    return String.format(TO_STRING_FORMAT, brand, volume, display);
   }
 
 }
