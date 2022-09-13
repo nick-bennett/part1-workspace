@@ -43,7 +43,7 @@ public class Department {
         // Note: we don't use for-each here because we only want to access the array where employees were added.
         // Question: what is in the array for indices where no Employee was added?  null!
         for (int i = 0; i < currentIndex; i++) {
-            System.out.println(employees[i]);  // toString() automatically called
+            System.out.println(employees[i].toString());  // toString() automatically called
         }
     }
 
