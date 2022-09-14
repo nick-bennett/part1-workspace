@@ -14,22 +14,28 @@ import gov.irs.TaxPayer;
  * Corporate entity - also pays taxes.
  */
 public class Corporation implements TaxPayer {
-    private String name;
 
-    public Corporation(String name) {
-        setName(name);
-    }
+  private String name;
 
-    @Override  // interface TaxPayer
-    public void payTaxes() {
-        System.out.println(getName() + " paid no taxes - we lobbied hard and it worked");
-    }
+  public Corporation(String name) {
+    setName(name);
+  }
 
-    public String getName() {
-        return name;
-    }
+  @Override  // interface TaxPayer
+  public void payTaxes() {
+    System.out.println(getName() + " paid no taxes - we lobbied hard and it worked");
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  @Override
+  public double getStandardDeduction() {
+    return 0;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }
