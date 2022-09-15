@@ -8,58 +8,83 @@
 
 package com.hr.personnel;
 
+import gov.irs.IllegalWageException;
 import java.time.LocalDate;
 
 public class HourlyEmployee extends Employee {
-    // fields
-    private double rate;
-    private double hours;
 
-    // constructors
-    public HourlyEmployee() {
-    }
+  // constants
+  public static final double FEDERAL_MINIMUM_WAGE = 15;
+  private static final String ILLEGAL_RATE_FORMAT = "Illegal wage: %.2f. Federal minimum wage is %.2f";
 
-    public HourlyEmployee(String name, LocalDate hireDate) {
-        super(name, hireDate);  // delegate to superclass ctor for name, hireDate
-    }
+  // fields
+  private double rate;
+  private double hours;
 
-    public HourlyEmployee(String name, LocalDate hireDate, double rate, double hours) {
-        this(name, hireDate);   // delegate to neighboring ctor for name, hireDate
-        setRate(rate);          // handle rate here, by delegating to setter
-        setHours(hours);        // handle hours here, by delegating to setter
-    }
+  // constructors
+  public HourlyEmployee() {
+  }
 
-    // business methods
-    @Override
-    public void pay() {
-        System.out.println(getName() + " is paid hourly " + (getRate() * getHours()));
-    }
+  public HourlyEmployee(String name, LocalDate hireDate) {
+    super(name, hireDate);  // delegate to superclass ctor for name, hireDate
+  }
 
-    @Override  // interface TaxPayer
-    public void payTaxes() {
-        double taxes = getRate() * getHours() * HOURLY_TAX_RATE;
-        System.out.println(getName() + " paid taxes of " + taxes);
-    }
+  /**
+   *
+   * @param name
+   * @param hireDate
+   * @param rate
+   * @param hours
+   * @throws IllegalArgumentException If rate is less than federal minimum hourly wage.
+   */
+  public HourlyEmployee(String name, LocalDate hireDate, double rate, double hours)
+      throws IllegalWageException {
+    this(name, hireDate);   // delegate to neighboring ctor for name, hireDate
+    setRate(rate);          // handle rate here, by delegating to setter
+    setHours(hours);        // handle hours here, by delegating to setter
+  }
 
-    // accessor methods
-    public double getRate() {
-        return rate;
-    }
+  // business methods
+  @Override
+  public void pay() {
+    System.out.println(getName() + " is paid hourly " + (getRate() * getHours()));
+  }
 
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
+  @Override  // interface TaxPayer
+  public void payTaxes() {
+    double taxes = getRate() * getHours() * HOURLY_TAX_RATE;
+    System.out.println(getName() + " paid taxes of " + taxes);
+  }
 
-    public double getHours() {
-        return hours;
-    }
+  // accessor methods
+  public double getRate() {
+    return rate;
+  }
 
-    public void setHours(double hours) {
-        this.hours = hours;
+  /**
+   * Sets the hourly rate of this employee to the specified value.
+   *
+   * @param rate Hourly pay rate.
+   * @throws IllegalArgumentException If rate is below the federal minimum hourly wage.
+   */
+  public void setRate(double rate) throws IllegalWageException {
+    if (rate < FEDERAL_MINIMUM_WAGE) {
+      throw new IllegalWageException(
+          String.format(ILLEGAL_RATE_FORMAT, rate, FEDERAL_MINIMUM_WAGE));
     }
+    this.rate = rate;
+  }
 
-    @Override
-    public String toString() {
-        return super.toString() + ", rate=" + getRate() + ", hours=" + getHours();
-    }
+  public double getHours() {
+    return hours;
+  }
+
+  public void setHours(double hours) {
+    this.hours = hours;
+  }
+
+  @Override
+  public String toString() {
+    return super.toString() + ", rate=" + getRate() + ", hours=" + getHours();
+  }
 }
