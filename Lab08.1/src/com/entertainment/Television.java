@@ -9,6 +9,7 @@
 package com.entertainment;
 
 import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Class definition to model the workings of a television set.
@@ -19,7 +20,7 @@ public class Television {
     // CLASS (static) variables - these are shared among all instances
     public static final int MIN_VOLUME = 0;
     public static final int MAX_VOLUME = 100;
-    public static final String[] VALID_BRANDS = { "Samsung", "LG", "Sony", "Toshiba" };
+    public static final Set<String> VALID_BRANDS = Set.of("Samsung", "LG", "Sony", "Toshiba");
 
     private static int instanceCount = 0;
 
@@ -80,12 +81,11 @@ public class Television {
     }
 
     public void setBrand(String brand) {
-        if (isValidBrand(brand)) {
+        if (VALID_BRANDS.contains(brand)) {
             this.brand = brand;
         }
         else {
-            String brands = Arrays.toString(VALID_BRANDS);
-            System.out.println("Invalid brand: " + brand + ". Valid brands are " + brands + ".");
+            System.out.println("Invalid brand: " + brand + ". Valid brands are " + VALID_BRANDS + ".");
         }
     }
 
